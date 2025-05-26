@@ -1,4 +1,3 @@
-// src/js/mockdata.js
 export const productData = [
   {
     id: 1,
@@ -8,6 +7,10 @@ export const productData = [
     discounted: 59000,
     created: "2025-05-20",
     updated: "2025-05-22",
+    slug: "hat-meo-catsrang",
+    description: "Hạt mèo Catsrang phù hợp cho mọi lứa tuổi, giàu dinh dưỡng, hỗ trợ tiêu hóa.",
+    minAgeMonth: 1,
+    minWeight: 0.5
   },
   {
     id: 2,
@@ -17,6 +20,10 @@ export const productData = [
     discounted: 239000,
     created: "2025-05-19",
     updated: "2025-05-21",
+    slug: "thuc-an-royal-canin",
+    description: "Thức ăn cao cấp Royal Canin dành cho mèo trưởng thành, tăng cường sức khỏe lông và da.",
+    minAgeMonth: 12,
+    minWeight: 2
   },
   {
     id: 3,
@@ -26,6 +33,10 @@ export const productData = [
     discounted: 72000,
     created: "2025-05-18",
     updated: "2025-05-20",
+    slug: "cat-ve-sinh-thu-cung",
+    description: "Cát vệ sinh tự nhiên, khử mùi tốt, không gây bụi, an toàn cho thú cưng.",
+    minAgeMonth: 0,
+    minWeight: 0
   },
   {
     id: 4,
@@ -35,6 +46,10 @@ export const productData = [
     discounted: 67000,
     created: "2025-05-17",
     updated: "2025-05-19",
+    slug: "pate-meo-hai-san",
+    description: "Pate mèo vị hải sản thơm ngon, dành cho mèo từ 6 tháng tuổi trở lên.",
+    minAgeMonth: 6,
+    minWeight: 1
   },
   {
     id: 5,
@@ -44,6 +59,10 @@ export const productData = [
     discounted: 25000,
     created: "2025-05-16",
     updated: "2025-05-18",
+    slug: "bong-do-choi-meo",
+    description: "Bóng đồ chơi nhỏ gọn, giúp mèo vận động và giải trí.",
+    minAgeMonth: 2,
+    minWeight: 0.5
   },
   {
     id: 6,
@@ -53,6 +72,10 @@ export const productData = [
     discounted: 45000,
     created: "2025-05-15",
     updated: "2025-05-17",
+    slug: "day-dat-cho-cao-cap",
+    description: "Dây dắt chó bền chắc, phù hợp cho chó từ 5kg trở lên.",
+    minAgeMonth: 6,
+    minWeight: 5
   },
   {
     id: 7,
@@ -62,6 +85,10 @@ export const productData = [
     discounted: 99000,
     created: "2025-05-14",
     updated: "2025-05-16",
+    slug: "thuc-an-cho-pedigree",
+    description: "Thức ăn khô Pedigree cho chó trưởng thành, hỗ trợ xương khớp.",
+    minAgeMonth: 12,
+    minWeight: 3
   },
   {
     id: 8,
@@ -71,6 +98,10 @@ export const productData = [
     discounted: 199000,
     created: "2025-05-13",
     updated: "2025-05-15",
+    slug: "chuong-meo-gap-gon",
+    description: "Chuồng mèo tiện lợi, dễ gấp gọn, phù hợp cho mèo mọi lứa tuổi.",
+    minAgeMonth: 0,
+    minWeight: 0
   },
   {
     id: 9,
@@ -80,6 +111,10 @@ export const productData = [
     discounted: 55000,
     created: "2025-05-12",
     updated: "2025-05-14",
+    slug: "sua-tam-cho-meo",
+    description: "Sữa tắm dịu nhẹ, làm sạch lông, an toàn cho chó mèo từ 2 tháng tuổi.",
+    minAgeMonth: 2,
+    minWeight: 0.5
   },
   {
     id: 10,
@@ -89,6 +124,10 @@ export const productData = [
     discounted: 80000,
     created: "2025-05-11",
     updated: "2025-05-13",
+    slug: "khay-ve-sinh-meo",
+    description: "Khay vệ sinh rộng rãi, dễ làm sạch, phù hợp cho mèo mọi lứa tuổi.",
+    minAgeMonth: 0,
+    minWeight: 0
   },
   {
     id: 11,
@@ -98,6 +137,10 @@ export const productData = [
     discounted: 39000,
     created: "2025-05-10",
     updated: "2025-05-12",
+    slug: "ao-cho-nho",
+    description: "Áo giữ ấm cho chó nhỏ, phù hợp với chó từ 1kg trở lên.",
+    minAgeMonth: 3,
+    minWeight: 1
   },
   {
     id: 12,
@@ -107,5 +150,9 @@ export const productData = [
     discounted: 149000,
     created: "2025-05-09",
     updated: "2025-05-11",
+    slug: "cay-cao-mong-meo",
+    description: "Cây cào móng bền chắc, giúp mèo mài móng và thư giãn.",
+    minAgeMonth: 3,
+    minWeight: 1
   },
 ];
