@@ -14,7 +14,58 @@ Chart.defaults.plugins.tooltip.mode = 'index'
 Chart.defaults.plugins.tooltip.position = 'nearest'
 Chart.defaults.plugins.tooltip.external = coreui.ChartJS.customTooltips
 Chart.defaults.defaultFontColor = coreui.Utils.getStyle('--cui-body-color')
+import { protectPage, logout, getCurrentUser } from './auth.js';
 
+// Bảo vệ trang - yêu cầu đăng nhập để xem trang
+document.addEventListener('DOMContentLoaded', () => {
+  // Không yêu cầu đăng nhập với trang login
+  if (window.location.pathname.includes('login.html')) {
+    return;
+  }
+
+  // Yêu cầu đăng nhập với các trang khác
+  if (!protectPage()) {
+    return; // Đã chuyển hướng đến trang đăng nhập
+  }
+
+  // Thiết lập thông tin người dùng nếu đã đăng nhập
+  setupUserInfo();
+
+  // Thiết lập sự kiện đăng xuất
+  setupLogoutButton();
+});
+
+// Hiển thị thông tin người dùng hiện tại
+function setupUserInfo() {
+  const user = getCurrentUser();
+  if (user) {
+    // Tìm các phần tử hiển thị thông tin người dùng và cập nhật
+    // Ví dụ: tên người dùng ở dropdown menu
+    const userNameElements = document.querySelectorAll('.user-name');
+    userNameElements.forEach(element => {
+      element.textContent = user.name || 'Người dùng';
+    });
+
+    // Cập nhật avatar nếu có
+    const avatarElements = document.querySelectorAll('.avatar-img');
+    if (user.avatar) {
+      avatarElements.forEach(element => {
+        element.src = user.avatar;
+      });
+    }
+  }
+}
+
+// Thiết lập sự kiện cho nút đăng xuất
+function setupLogoutButton() {
+  const logoutButtons = document.querySelectorAll('a[href="#"].logout-button, a[href="#"]:has(svg[use*="cil-account-logout"])');
+  logoutButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  });
+}
 document.documentElement.addEventListener('ColorSchemeChange', () => {
   cardChart1.data.datasets[0].pointBackgroundColor = coreui.Utils.getStyle('--cui-primary')
   cardChart2.data.datasets[0].pointBackgroundColor = coreui.Utils.getStyle('--cui-info')

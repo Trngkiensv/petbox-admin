@@ -33,6 +33,23 @@
   <link href="css/style.css" rel="stylesheet">
   <!-- We use those styles to show code examples, you should remove them in your application.-->
   <link href="css/examples.css" rel="stylesheet">
+  <!-- Thêm CSS cho pre và code trong modal -->
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      max-height: 150px;
+      overflow: auto;
+    }
+    pre code {
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+    }
+    .modal-body table td {
+      vertical-align: top;
+    }
+  </style>
   <script src="js/config.js"></script>
   <script src="js/color-modes.js"></script>
 </head>
@@ -94,6 +111,6 @@
 <!-- CoreUI and necessary plugins-->
 <script src="node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
 <script src="node_modules/simplebar/dist/simplebar.min.js"></script>
-<script src="js/login.js" defer></script>
+<script src="js/login.js" type="module" defer></script>
 </body>
 </html>

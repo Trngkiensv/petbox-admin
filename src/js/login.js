@@ -1,5 +1,14 @@
+import { isAuthenticated } from './auth.js';
+import { API_BASE_URL, API_ENDPOINTS } from './config.js';
+
+// Chuyển hướng đến trang chính nếu người dùng đã đăng nhập
+if (isAuthenticated()) {
+  window.location.href = 'index.html';
+}
+
 // Đảm bảo DOM đã sẵn sàng trước khi chạy script
 document.addEventListener('DOMContentLoaded', () => {
+  // Lấy tham chiếu đến các phần tử DOM
   const loginForm = document.getElementById('loginForm');
   const errorMessage = document.getElementById('errorMessage');
   const phoneNumberInput = document.getElementById('phoneNumber');
@@ -67,33 +76,93 @@ document.addEventListener('DOMContentLoaded', () => {
     // Nếu form hợp lệ, gửi yêu cầu đăng nhập
     if (isValid) {
       try {
-        const response = await fetch('https://petbox-api-e4a2.onrender.com/v1/auth/login', {
+        // Hiển thị trạng thái loading khi đang xử lý đăng nhập
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
+
+        // Chuẩn bị dữ liệu gửi đi
+        const requestData = { phoneNumber, password };
+        const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.LOGIN}`;
+
+        // Log thông tin request để debug (chỉ hiển thị trong console)
+        console.log('Gửi request đăng nhập:', {
+          url: apiUrl,
+          method: 'POST',
+          body: { phoneNumber, password }
+        });
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ phoneNumber, password }),
+          body: JSON.stringify(requestData),
           credentials: 'include'
         });
 
+        // Xử lý phản hồi dựa trên status code
         if (!response.ok) {
           const contentType = response.headers.get('content-type');
+
           if (contentType && contentType.includes('application/json')) {
             const result = await response.json();
             errorMessage.classList.remove('d-none');
-            errorMessage.textContent = result.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+
+            // Xử lý các mã lỗi cụ thể từ API
+            if (response.status === 404) {
+              errorMessage.textContent = 'Số điện thoại không tồn tại trong hệ thống.';
+            } else if (response.status === 401) {
+              errorMessage.textContent = 'Mật khẩu không chính xác.';
+            } else {
+              errorMessage.textContent = result.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+            }
           } else {
             errorMessage.classList.remove('d-none');
             errorMessage.textContent = 'Lỗi server. Vui lòng thử lại sau.';
           }
         } else {
           const result = await response.json();
-          window.location.href = 'index.html';
+          console.log('Đăng nhập thành công:', result);
+
+          // Lưu thông tin token vào localStorage để sử dụng cho các API khác
+          if (result.tokens) {
+            localStorage.setItem('accessToken', result.tokens.access.token);
+            localStorage.setItem('refreshToken', result.tokens.refresh.token);
+          } else if (result.token) {
+            // Hỗ trợ cả định dạng API trả về token đơn
+            localStorage.setItem('accessToken', result.token);
+          }
+
+          if (result.user) {
+            localStorage.setItem('currentUser', JSON.stringify(result.user));
+          } else if (result.userData) {
+            // Hỗ trợ cả định dạng API trả về userData
+            localStorage.setItem('currentUser', JSON.stringify(result.userData));
+          }
+
+          // Hiển thị thông báo thành công trước khi chuyển hướng
+          errorMessage.classList.remove('d-none');
+          errorMessage.classList.remove('alert-danger');
+          errorMessage.classList.add('alert-success');
+          errorMessage.textContent = 'Đăng nhập thành công! Đang chuyển hướng...';
+
+          // Tự động chuyển hướng sau 1 giây
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
         }
       } catch (error) {
         // Xử lý lỗi mạng hoặc server
+        console.error('Login error:', error);
         errorMessage.classList.remove('d-none');
-        errorMessage.textContent = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+        errorMessage.textContent = 'Có lỗi xảy ra khi kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng và thử lại sau.';
+      } finally {
+        // Khôi phục trạng thái nút submit
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Đăng nhập';
       }
     }
   });
