@@ -1,4 +1,4 @@
-import { isAuthenticated } from './auth.js';
+import { isAuthenticated, saveUserInfo } from './auth.js';
 import { API_BASE_URL, API_ENDPOINTS } from './config.js';
 
 // Chuyển hướng đến trang chính nếu người dùng đã đăng nhập
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     // Lấy giá trị từ form
-    const phoneNumber = normalizePhoneNumber(phoneNumberInput.value);
+    const phone = normalizePhoneNumber(phoneNumberInput.value);
     const password = passwordInput.value;
 
     // Xác thực form
@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     errorMessage.classList.add('d-none');
 
     // Kiểm tra số điện thoại
-    if (!phoneNumber) {
+    if (!phone) {
       phoneNumberInput.classList.add('is-invalid');
       phoneNumberInput.nextElementSibling.textContent = 'Vui lòng nhập số điện thoại.';
       isValid = false;
-    } else if (!PHONE_RULE.test(phoneNumber)) {
+    } else if (!PHONE_RULE.test(phone)) {
       phoneNumberInput.classList.add('is-invalid');
       phoneNumberInput.nextElementSibling.textContent = 'Số điện thoại không hợp lệ.';
       isValid = false;
@@ -83,14 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
 
         // Chuẩn bị dữ liệu gửi đi
-        const requestData = { phoneNumber, password };
+        const requestData = { phone: phone, password };
         const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.LOGIN}`;
 
         // Log thông tin request để debug (chỉ hiển thị trong console)
         console.log('Gửi request đăng nhập:', {
           url: apiUrl,
           method: 'POST',
-          body: { phoneNumber, password }
+          body: { phone: phone, password }
         });
 
         const response = await fetch(apiUrl, {
@@ -126,21 +126,33 @@ document.addEventListener('DOMContentLoaded', () => {
           const result = await response.json();
           console.log('Đăng nhập thành công:', result);
 
-          // Lưu thông tin token vào localStorage để sử dụng cho các API khác
-          if (result.tokens) {
-            localStorage.setItem('accessToken', result.tokens.access.token);
-            localStorage.setItem('refreshToken', result.tokens.refresh.token);
-          } else if (result.token) {
-            // Hỗ trợ cả định dạng API trả về token đơn
-            localStorage.setItem('accessToken', result.token);
+          // Xử lý và lưu thông tin người dùng từ response
+          let userData = null;
+          let accessToken = null;
+          let refreshToken = null;
+
+          // Xác định user data từ kết quả
+          if (result.user) {
+            userData = result.user;
+          } else if (result.userData) {
+            userData = result.userData;
+          } else if (result.data) {
+            userData = result.data;
           }
 
-          if (result.user) {
-            localStorage.setItem('currentUser', JSON.stringify(result.user));
-          } else if (result.userData) {
-            // Hỗ trợ cả định dạng API trả về userData
-            localStorage.setItem('currentUser', JSON.stringify(result.userData));
+          // Xác định token từ kết quả
+          if (result.tokens) {
+            accessToken = result.tokens.access.token;
+            refreshToken = result.tokens.refresh.token;
+          } else if (result.token) {
+            accessToken = result.token;
           }
+
+          // Lưu thông tin người dùng bằng hàm saveUserInfo
+          saveUserInfo(userData, accessToken, refreshToken);
+
+          // Log thông tin đăng nhập thành công để debug
+          console.log('Đăng nhập thành công với user:', userData);
 
           // Hiển thị thông báo thành công trước khi chuyển hướng
           errorMessage.classList.remove('d-none');
@@ -148,7 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
           errorMessage.classList.add('alert-success');
           errorMessage.textContent = 'Đăng nhập thành công! Đang chuyển hướng...';
 
-          // Tự động chuyển hướng sau 1 giây
+          // Lưu trạng thái đã đăng nhập
+          localStorage.setItem('isLoggedIn', 'true');
+
+          // Tự động chuyển hướng sau 1 giây - chuyển đến index.html
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 1000);

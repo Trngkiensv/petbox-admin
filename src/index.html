@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Chuyển hướng...</title>
+  <script>
+    // Chuyển hướng về trang đăng nhập
+    window.location.href = 'login.html';
+  </script>
+</head>
+<body>
+  <p>Đang chuyển hướng tới trang đăng nhập...</p>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Đang chuyển hướng...</title>
+  <script>
+    // Kiểm tra trạng thái đăng nhập
+    window.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('accessToken');
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      if (token && isLoggedIn) {
+        // Nếu đã đăng nhập, chuyển đến dashboard
+        window.location.href = 'dashboard.html';
+      } else {
+        // Nếu chưa đăng nhập, chuyển đến trang đăng nhập
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+</head>
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <p>Đang chuyển hướng...</p>
+  </div>
+</body>
+</html>

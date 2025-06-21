@@ -23,9 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Yêu cầu đăng nhập với các trang khác
-  if (!protectPage()) {
-    return; // Đã chuyển hướng đến trang đăng nhập
+  // Kiểm tra trạng thái đăng nhập để bảo vệ trang hiện tại
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const token = localStorage.getItem('accessToken');
+
+  if (!isLoggedIn || !token) {
+    // Yêu cầu đăng nhập với các trang khác
+    if (!protectPage()) {
+      return; // Đã chuyển hướng đến trang đăng nhập
+    }
   }
 
   // Thiết lập thông tin người dùng nếu đã đăng nhập

@@ -15,7 +15,7 @@ const API_BASE_URL = 'http://localhost:8017';
 // Cấu hình API endpoints
 const API_ENDPOINTS = {
   STATUS: '/v1/status',
-  LOGIN: '/v1/auth/login',  // Cập nhật endpoint đăng nhập với prefix v1
+  LOGIN: '/v1/users/login',  // Cập nhật endpoint đăng nhập với prefix v1
   REGISTER: '/v1/auth/register',
   USERS: '/v1/users',
   PRODUCTS: '/v1/products',

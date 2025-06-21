@@ -43,7 +43,32 @@
     <link href="css/examples.css" rel="stylesheet">
     <script src="js/config.js"></script>
     <script src="js/color-modes.js"></script>
+    <script>
+      // Kiểm tra xác thực người dùng
+      document.addEventListener('DOMContentLoaded', () => {
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        const token = localStorage.getItem('accessToken');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        // Nếu chưa đăng nhập, chuyển hướng về trang đăng nhập
+        if (!token || !isLoggedIn) {
+          window.location.href = '../login.html';
+        }
+      });
+    </script>
     <link href="node_modules/@coreui/chartjs/dist/css/coreui-chartjs.css" rel="stylesheet">
+    <script>
+      // Kiểm tra trạng thái đăng nhập khi tải trang index
+      document.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const token = localStorage.getItem('accessToken');
+
+        if (!isLoggedIn || !token) {
+          // Nếu chưa đăng nhập, chuyển hướng đến trang login
+          window.location.href = 'login.html';
+        }
+      });
+    </script>
   </head>
   <body>
     <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">

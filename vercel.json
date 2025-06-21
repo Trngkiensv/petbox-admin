@@ -8,8 +8,20 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "/views/login.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/views/index.html"
+    },
+    {
+      "src": "/dashboard.html",
+      "dest": "/views/index.html"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/$1"
     }
   ]
 }
